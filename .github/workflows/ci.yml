@@ -1,0 +1,154 @@
+name: CI
+run-name: Build pipeline
+on:
+  push:
+    branches:
+      - "develop"
+      - "release/**"
+      - "main"
+
+env:
+  GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+  CR_TOKEN: ${{ secrets.CR_TOKEN }}
+
+jobs:
+  run-build:
+    runs-on:
+      ubuntu-latest
+      # group: default
+      # labels: build
+    timeout-minutes: 60
+
+    permissions:
+      contents: write
+
+    # NOT commit message contains `run-without-release` or `release-by-bot` keyword or pull request
+    # The branch is protected
+    if: |
+      ! (
+        contains(github.event.head_commit.message, 'run-without-release') ||
+        github.event_name == 'pull_request'
+      ) &&
+      github.ref_protected == true
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ env.GIT_TOKEN }}
+          fetch-depth: 0
+
+      - name: Bump prerelease version
+        # Commit to develop branch
+        if: |
+          github.ref_name == 'develop'
+        run: |
+          make version-prerelease
+          echo "1" > BUMPED
+
+      - name: Bump patch version
+        # Commit to `main` or `release/**` branch and commit message contains `run-patch-release` keyword
+        if: |
+          (
+            github.ref_name == 'main' ||
+            startsWith(github.ref_name, 'release/')
+          ) &&
+          contains(github.event.head_commit.message, 'run-patch-release')
+        run: |
+          make version-patch
+          echo "1" > BUMPED
+
+      - name: Bump minor version
+        # Commit to `main` or `release/**` branch and commit message contains `run-minor-release` keyword
+        if: |
+          (
+            github.ref_name == 'main' ||
+            startsWith(github.ref_name, 'release/')
+          ) &&
+          contains(github.event.head_commit.message, 'run-minor-release')
+        run: |
+          make version-minor
+          echo "1" > BUMPED
+
+      - name: Bump major version
+        # Commit to `main` or `release/**` branch and commit message contains `run-major-release` keyword
+        if: |
+          (
+            github.ref_name == 'main' ||
+            startsWith(github.ref_name, 'release/')
+          ) &&
+          contains(github.event.head_commit.message, 'run-major-release')
+        run: |
+          make version-major
+          echo "1" > BUMPED
+
+      - name: Bump version flag
+        id: bump-version-flag
+        run: |
+          echo "BUMPED=`cat BUMPED 2>/dev/null`" >> "$GITHUB_OUTPUT"
+
+      - name: Bump version enforcement
+        # Commit to `main` or `release/**` branch and no bumped version
+        if: |
+          (
+            github.ref_name == 'main' ||
+            startsWith(github.ref_name, 'release/')
+          ) &&
+          steps.bump-version-flag.outputs.BUMPED != '1'
+        run: |
+          make version-patch
+          echo "1" > BUMPED
+
+      - name: Setup
+        id: setup
+        run: |
+          echo "BUMPED=`cat BUMPED 2>/dev/null`" >> "$GITHUB_OUTPUT"
+          echo "IMAGE_NAME=`make name`" >> "$GITHUB_OUTPUT"
+          echo "IMAGE_TAG=`make version`" >> "$GITHUB_OUTPUT"
+          echo "IMAGE=`make name`:`make version`" >> "$GITHUB_OUTPUT"
+          rm -rf BUMPED
+
+      - name: Configure NPM credentials
+        # BUMPED version
+        if: steps.setup.outputs.BUMPED == '1'
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{ env.NPM_TOKEN }}" >> ./.npmrc
+
+      - name: Validate
+        # BUMPED version
+        if: steps.setup.outputs.BUMPED == '1'
+        run: |
+          make ci
+
+      - name: Build ${{ steps.setup.outputs.IMAGE }}
+        # BUMPED version
+        if: steps.setup.outputs.BUMPED == '1'
+        uses: coherent-plus/actions-kaniko@main
+        with:
+          username: ${{ github.repository_owner }}
+          password: ${{ env.CR_TOKEN }}
+          registry: "ghcr.io/${{ github.repository_owner }}"
+          image: ${{ steps.setup.outputs.IMAGE_NAME }}
+          tag: ${{ steps.setup.outputs.IMAGE_TAG }}
+          extra_args: --digest-file image-digest.txt --build-arg REPO=${{ github.server_url }}/${{ github.repository }}
+          cache: true
+          runs: |
+            echo "//npm.pkg.github.com/:_authToken=${{ env.NPM_TOKEN }}" >> ./.npmrc
+
+      - name: Build result
+        # BUMPED version
+        if: steps.setup.outputs.BUMPED == '1'
+        id: build-result
+        run: |
+          echo "IMAGE_DIGEST=`cat image-digest.txt`" >> "$GITHUB_OUTPUT"
+          rm -rf image-digest.txt
+
+      - name: Tag ${{ steps.setup.outputs.IMAGE_TAG }}
+        # BUMPED version
+        if: steps.setup.outputs.BUMPED == '1'
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git tag -a "${{ steps.setup.outputs.IMAGE_TAG }}" -m "${{ steps.build-result.outputs.IMAGE_DIGEST }}"
+          git push --tags
