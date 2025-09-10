@@ -21,7 +21,7 @@
   </v-sheet>
 
   <v-sheet border="md" class="pa-6 mx-auto" color="#F5F5F5">
-    <v-container>
+    <v-container style="max-width: 1440px;">
       <h4 class="text-h5 text-red-accent-2 font-weight-bold mb-4">1. PRIVACY POLICY</h4>
 
       <p class="mb-8 text-justify">

@@ -39,7 +39,7 @@
 
 <style scoped>
 #home {
-  background-image: url('https://myresit.resit.my/images/banner/retail-mobile-apps.jpg');
+  background-image: url('https://yopay.co.id/wp-content/uploads/2024/01/istockphoto-857387884-612x612-2.jpg');
   background-size: cover;
   background-position: center;
 }

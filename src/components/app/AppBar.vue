@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar color="black">
+  <v-app-bar color="black" scroll-behavior="elevate">
     <template #prepend>
       <v-img
         src="/assets/ampcell-white.png"
@@ -22,40 +22,40 @@
         >
           Home
         </v-btn>
-        <!-- <v-btn
-          v-for="item in menu"
-          v-if="!isProductRoute"
-          :key="item"
-          class="text-body-1 blue-grey-darken-4"
-          :href="`/#${item.toLowerCase()}`"
+
+        <!-- Mobile: direct navigation button -->
+        <v-btn
+          class="text-body-1 blue-grey-darken-4 d-inline-flex d-md-none"
+          :to="'/product'"
           variant="text"
         >
-          {{ item }}
-        </v-btn> -->
+          Product
+        </v-btn>
 
-        <v-menu
-          open-on-hover
-        >
-          <template #activator="{ props }">
-            <v-btn
-              class="text-body-1 blue-grey-darken-4"
-              v-bind="props"
-              variant="text"
-            >
-              Product
-            </v-btn>
-          </template>
+        <!-- Desktop: hover menu -->
+        <div class="d-none d-md-inline-flex">
+          <v-menu open-on-hover>
+            <template #activator="{ props }">
+              <v-btn
+                class="text-body-1 blue-grey-darken-4"
+                v-bind="props"
+                variant="text"
+              >
+                Product
+              </v-btn>
+            </template>
 
-          <v-list>
-            <v-list-item
-              v-for="(item, index) in items"
-              :key="index"
-              :href="item.href"
-            >
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
+            <v-list>
+              <v-list-item
+                v-for="(item, index) in items"
+                :key="index"
+                :to="item.href"
+              >
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </div>
       </div>
     </template>
   </v-app-bar>

@@ -28,7 +28,7 @@
     class="pa-6  mx-auto"
     color="#F5F5F5"
   >
-    <v-container>
+    <v-container style="max-width: 1440px;">
       <h4 class="text-h4 text-center font-weight-bold mb-10">T&C</h4>
 
       <p class="mb-8 text-justify">
@@ -64,7 +64,7 @@
 <style scoped>
     #home {
       position: relative;
-      background-image: url('https://www.liftec.co.uk/wp-content/uploads/2020/02/liftec-contracts.jpg');
+      background-image: url('https://digicheckins.com/wp-content/uploads/2019/06/inner-background-program-support.jpg');
       background-size: cover;
       background-position: center;
     }

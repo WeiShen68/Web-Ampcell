@@ -4,7 +4,7 @@
     class="py-16 text-center"
     color="secondary"
   >
-    <v-container>
+    <v-container style="max-width: 1440px;">
       <div class="text-h4 font-weight-bold">
         Our Mission
       </div>

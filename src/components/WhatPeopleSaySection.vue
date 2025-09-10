@@ -4,7 +4,7 @@
     class="py-16"
     color="secondary"
   >
-    <v-container>
+    <v-container style="max-width: 1440px;">
       <v-row align="center">
         <v-col cols="12" md="6">
           <div class="text-h4 font-weight-medium">

@@ -81,7 +81,7 @@
   <v-sheet
     class="text-center py-16"
   >
-    <v-container>
+    <v-container style="max-width: 1440px;">
       <v-row>
         <v-col cols="12" md="4">
           <a class="phone-link" href="tel:+603-2722 7156">

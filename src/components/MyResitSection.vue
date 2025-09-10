@@ -7,7 +7,7 @@
       Our Product
     </div>
 
-    <v-container>
+    <v-container style="max-width: 1440px;">
       <v-window v-model="onboarding" show-arrows="hover">
         <v-window-item key="card-1">
           <v-card class="" elevation="24" min-height="200">

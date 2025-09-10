@@ -12,7 +12,7 @@
       Have questions? Here you'll find the answers most valued by our partners, along with access to step-by-step instructions and support
     </div>
 
-    <v-container>
+    <v-container style="max-width: 1440px;">
       <v-row class="pa-10 text-left">
         <v-col
           class="pa-10"

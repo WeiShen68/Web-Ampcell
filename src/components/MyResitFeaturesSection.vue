@@ -8,7 +8,7 @@
       SERVE YOU CONTACTLESS TRANSACTION SLIP AND EASE YOUR LIFE
     </div>
 
-    <v-container>
+    <v-container style="max-width: 1440px;">
       <v-row>
         <v-col
           v-for="item in features"

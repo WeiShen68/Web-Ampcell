@@ -8,7 +8,7 @@
       <!-- SERVE YOU CONTACTLESS TRANSACTION SLIP AND EASE YOUR LIFE -->
     </div>
 
-    <v-container>
+    <v-container style="max-width: 1440px;">
       <v-row>
         <v-col
           v-for="item in features"
@@ -26,7 +26,7 @@
               {{ item.title }}
             </div>
 
-            <div class="text-body-1 text-medium-emphasis mt-2">
+            <div class="text-body-1 text-medium-emphasis text-justify mt-2">
               {{ item.description }}
             </div>
           </div>

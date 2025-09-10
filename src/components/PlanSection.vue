@@ -4,7 +4,7 @@
     class="d-flex align-center py-16"
     color="secondary"
   >
-    <v-container>
+    <v-container style="max-width: 1440px;">
       <!-- <v-row class="d-flex align-center">
         <v-col cols="12" md="5">
           <div class="text-h4 font-weight-bold">
@@ -100,7 +100,7 @@
             <v-col class="text-center" cols="12" md="6">
               <v-img
                 alt="Partner With Us Image"
-                class="mx-auto mt-5 rounded"
+                class="mx-auto mt-5 rounded-xl"
                 cover
                 max-height="300"
                 :src="'https://w0.peakpx.com/wallpaper/88/28/HD-wallpaper-people-meeting-happy-faces-business-partnership-others-thumbnail.jpg'"
@@ -109,7 +109,7 @@
 
             <!-- Text Column -->
             <v-col cols="12" md="6">
-              <div class="text-h6 text-medium-emphasis mt-5 text-justify">
+              <div :class="xs ? 'text-subtitle-1 text-medium-emphasis mt-5 text-justify' : 'text-h6 text-medium-emphasis mt-5 text-justify'">
                 Partner with Ampcell and transform your payment infrastructure. Whether you're looking to boost revenue, enhance efficiency, or fortify security, we have the expertise and technology to help you succeed.
               </div>
             </v-col>
@@ -119,3 +119,9 @@
     </v-container>
   </v-sheet>
 </template>
+
+<script setup>
+import { useDisplay } from 'vuetify'
+
+const { xs } = useDisplay()
+</script>

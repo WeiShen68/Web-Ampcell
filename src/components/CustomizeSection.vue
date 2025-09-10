@@ -3,39 +3,32 @@
     class="py-16"
     color="secondary"
   >
-    <v-container>
+    <v-container style="max-width: 1440px;">
       <v-row align="center">
         <v-col cols="12" md="7">
-          <v-list
-            base-color="transparent"
-            bg-color="transparent"
-            class="px-2"
-            lines="three"
-            variant="flat"
-          >
-            <v-list-item
+          <div class="px-2">
+            <div
               v-for="(item, index) in customize"
               :key="item.title"
-              class="ga-5"
+              class="d-flex align-start ga-4 mb-6 pa-4"
               :class="{ 'bg-grey-lighten-5 elevation-5 rounded': currentIndex === index }"
             >
-              <template #prepend>
-                <img :height="80" :src="item.icon" width="80">
-              </template>
-
-              <template #title>
-                <span class="text-h6 font-weight-bold">{{ item.title }}</span>
-              </template>
-
-              <template #subtitle>
-                <span class="text-body-1 text-grey-darken-3">{{ item.subtitle }}</span>
-              </template>
-            </v-list-item>
-          </v-list>
+              <img :height="80" :src="item.icon" width="80" class="flex-shrink-0">
+              
+              <div class="flex-grow-1">
+                <div :class="xs ? 'text-h6 font-weight-medium mb-2' : 'text-h6 font-weight-bold mb-2'">
+                  {{ item.title }}
+                </div>
+                <div :class="xs ? 'text-body-2 text-grey-darken-3 text-justify' : 'text-body-1 text-grey-darken-3'">
+                  {{ item.subtitle }}
+                </div>
+              </div>
+            </div>
+          </div>
         </v-col>
 
         <v-col cols="12" md="5">
-          <v-img class="rounded" :src="currentImage" />
+          <v-img class="rounded-xl" :src="currentImage" max-height="480" cover/>
         </v-col>
       </v-row>
     </v-container>
@@ -44,6 +37,10 @@
 
 <script setup>
   import { onBeforeUnmount, ref } from 'vue'
+  import { useDisplay } from 'vuetify'
+
+  const { xs } = useDisplay()
+
   const customize = [
     {
       icon: './assets/retail.png',
