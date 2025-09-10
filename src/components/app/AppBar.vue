@@ -28,6 +28,7 @@
           class="text-body-1 blue-grey-darken-4 d-inline-flex d-md-none"
           :to="'/product'"
           variant="text"
+          @click="scrollToTop"
         >
           Product
         </v-btn>
@@ -50,6 +51,7 @@
                 v-for="(item, index) in items"
                 :key="index"
                 :to="item.href"
+                @click="scrollToTop"
               >
                 <v-list-item-title>{{ item.title }}</v-list-item-title>
               </v-list-item>
@@ -82,5 +84,13 @@
   // Define the navigatePush method to navigate to a specific route
   const navigatePush = (routeName, params) => {
     router.push({ name: routeName, params: { ...params } }).catch(() => {})
+  }
+
+  // Define the scrollToTop method to scroll to the top of the page
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    })
   }
 </script>
